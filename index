@@ -135,12 +135,12 @@
     <h1>Personal Storage Hub</h1>
     <p>Secure cloud access</p>
 
-    <a class="btn drive" href="PASTE_DRIVE_LINK_HERE" target="_blank">
+    <a class="btn drive" href="https://drive.google.com/drive/folders/1FatQOQmnNPinJauQJkQuz50EHlxX9M0v" target="_blank">
       <i class="fa-brands fa-google-drive"></i>
       Google Drive
     </a>
 
-    <a class="btn mega" href="PASTE_MEGA_LINK_HERE" target="_blank">
+    <a class="btn mega" href="https://mega.nz/folder/fhZUXDCQ#m0cbEPWdVtkXxJt8HC8Log" target="_blank">
       <i class="fa-solid fa-cloud"></i>
       MEGA Storage
     </a>
