@@ -2,169 +2,634 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Secure Storage Hub</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<!-- Font Awesome -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
+<title>Secure Storage</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  body {
+* {
     margin: 0;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-    background: radial-gradient(circle at top, #1b2735, #090a0f);
-    color: #e5e7eb;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-  }
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
 
-  .card {
-    background: rgba(15, 23, 42, 0.75);
-    border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 20px;
-    padding: 32px;
+:root {
+    --primary: #6366f1;
+    --primary-dark: #4f46e5;
+    --secondary: #8b5cf6;
+    --accent: #10b981;
+    --danger: #ef4444;
+    --dark-bg: #0a0a1a;
+    --dark-surface: #111827;
+    --dark-card: #1f2937;
+    --text-primary: #f9fafb;
+    --text-secondary: #d1d5db;
+    --border: rgba(255, 255, 255, 0.1);
+    --glow: rgba(99, 102, 241, 0.3);
+}
+
+html, body {
+    height: 100%;
+    background-color: var(--dark-bg);
+    color: var(--text-primary);
+    overflow-x: hidden;
+}
+
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(ellipse at top, #1e1b4b 0%, var(--dark-bg) 70%);
+    position: relative;
+    padding: 20px;
+}
+
+/* Background elements */
+.bg-decoration {
+    position: fixed;
+    z-index: -1;
+    pointer-events: none;
+}
+
+.bg-circle {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(60px);
+    opacity: 0.15;
+}
+
+.circle-1 {
+    width: 300px;
+    height: 300px;
+    background: var(--primary);
+    top: 10%;
+    right: 10%;
+}
+
+.circle-2 {
+    width: 250px;
+    height: 250px;
+    background: var(--secondary);
+    bottom: 15%;
+    left: 10%;
+}
+
+.circle-3 {
+    width: 180px;
+    height: 180px;
+    background: var(--accent);
+    top: 60%;
+    right: 20%;
+}
+
+/* Main app container */
+.app {
     width: 100%;
     max-width: 420px;
-    box-shadow: 0 30px 60px rgba(0,0,0,0.6);
-  }
+    z-index: 10;
+    animation: appIn 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
 
-  h1 {
+@keyframes appIn {
+    from { opacity: 0; transform: translateY(30px) scale(0.96); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Card styling */
+.card {
+    background: rgba(31, 41, 55, 0.7);
+    backdrop-filter: blur(20px);
+    border-radius: 24px;
+    padding: 36px 32px;
+    box-shadow: 
+        0 20px 60px rgba(0, 0, 0, 0.5),
+        0 0 0 1px rgba(255, 255, 255, 0.05),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+}
+
+.card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--primary), transparent);
+}
+
+/* Login section */
+.login h1 {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
     text-align: center;
-    font-size: 1.5rem;
-    margin: 0 0 16px;
-  }
+}
 
-  p {
+.login-subtitle {
+    font-size: 14px;
+    color: var(--text-secondary);
     text-align: center;
-    font-size: 0.9rem;
-    color: #cbd5f5;
-  }
+    margin-bottom: 32px;
+    opacity: 0.8;
+}
 
-  input {
-    width: 100%;
-    padding: 12px;
-    margin-top: 12px;
-    border-radius: 10px;
-    border: none;
-    background: #020617;
-    color: #e5e7eb;
-    font-size: 0.9rem;
-  }
+/* Input fields */
+.field {
+    margin-bottom: 22px;
+    position: relative;
+}
 
-  button {
+.field-label {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 8px;
+    color: var(--text-secondary);
+    padding-left: 4px;
+}
+
+.input-wrapper {
+    position: relative;
+}
+
+.input-icon {
+    position: absolute;
+    left: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-secondary);
+    font-size: 16px;
+}
+
+.input-field {
     width: 100%;
-    margin-top: 16px;
-    padding: 12px;
-    border-radius: 12px;
+    padding: 18px 18px 18px 50px;
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    background: rgba(17, 24, 39, 0.7);
+    color: var(--text-primary);
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+.input-field:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px var(--glow);
+    background: rgba(17, 24, 39, 0.9);
+}
+
+.input-field::placeholder {
+    color: #6b7280;
+}
+
+/* Button styling */
+.unlock-btn {
+    margin-top: 28px;
+    width: 100%;
+    padding: 18px;
     border: none;
-    background: linear-gradient(135deg, #2563eb, #1e40af);
+    border-radius: 14px;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
     color: white;
+    font-size: 16px;
     font-weight: 600;
     cursor: pointer;
-  }
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
 
-  button:hover {
-    opacity: 0.9;
-  }
+.unlock-btn::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.7s ease;
+}
 
-  .error {
-    margin-top: 10px;
-    text-align: center;
-    color: #f87171;
-    font-size: 0.85rem;
+.unlock-btn:hover::after {
+    left: 100%;
+}
+
+.unlock-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(99, 102, 241, 0.4);
+}
+
+.unlock-btn:active {
+    transform: translateY(0);
+}
+
+/* Vault section */
+.vault {
     display: none;
-  }
+}
 
-  .links {
-    display: none;
-    flex-direction: column;
-    gap: 16px;
-    margin-top: 26px;
-  }
+.vault-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 30px;
+}
 
-  .btn {
+.vault-title {
+    font-size: 24px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.vault-title i {
+    color: var(--accent);
+}
+
+.logout-btn {
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--danger);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    border-radius: 10px;
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.logout-btn:hover {
+    background: rgba(239, 68, 68, 0.2);
+}
+
+/* Links grid */
+.links-grid {
+    display: grid;
+    gap: 20px;
+}
+
+.link-card {
+    padding: 22px;
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    background: rgba(17, 24, 39, 0.7);
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.link-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.link-card:hover::before {
+    opacity: 1;
+}
+
+.link-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(99, 102, 241, 0.4);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+.link-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 14px;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 12px;
-    padding: 14px;
-    border-radius: 14px;
-    font-size: 0.95rem;
+    font-size: 24px;
+    flex-shrink: 0;
+}
+
+.drive .link-icon {
+    background: rgba(59, 130, 246, 0.15);
+    color: #3b82f6;
+}
+
+.mega .link-icon {
+    background: rgba(239, 68, 68, 0.15);
+    color: #ef4444;
+}
+
+.link-content {
+    flex-grow: 1;
+    text-align: left;
+}
+
+.link-name {
+    font-size: 18px;
     font-weight: 600;
-    text-decoration: none;
-    color: #fff;
-  }
+    margin-bottom: 4px;
+}
 
-  .drive {
-    background: linear-gradient(135deg, #2563eb, #1e40af);
-  }
+.link-desc {
+    font-size: 13px;
+    color: var(--text-secondary);
+    opacity: 0.8;
+}
 
-  .mega {
-    background: linear-gradient(135deg, #dc2626, #7f1d1d);
-  }
+.link-arrow {
+    color: var(--text-secondary);
+    font-size: 18px;
+    opacity: 0.7;
+    transition: transform 0.3s;
+}
 
-  footer {
-    margin-top: 24px;
+.link-card:hover .link-arrow {
+    transform: translateX(4px);
+    opacity: 1;
+}
+
+/* Status indicator */
+.status-indicator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 28px;
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+/* Error animation */
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+    20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+.shake {
+    animation: shake 0.3s ease-in-out;
+}
+
+/* Footer */
+.footer {
     text-align: center;
-    font-size: 0.75rem;
-    color: #94a3b8;
-  }
+    margin-top: 30px;
+    font-size: 12px;
+    color: var(--text-secondary);
+    opacity: 0.6;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+    .app {
+        max-width: 100%;
+        padding: 16px;
+    }
+    
+    .card {
+        padding: 28px 22px;
+    }
+    
+    .login h1 {
+        font-size: 24px;
+    }
+}
+
+/* Access animation */
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in-up {
+    animation: fadeInUp 0.6s ease forwards;
+}
 </style>
 </head>
 
 <body>
+<!-- Background decoration -->
+<div class="bg-decoration">
+    <div class="bg-circle circle-1"></div>
+    <div class="bg-circle circle-2"></div>
+    <div class="bg-circle circle-3"></div>
+</div>
 
-<div class="card">
-
-  <!-- LOGIN -->
-  <div id="loginBox">
-    <h1>Restricted Access</h1>
-    <p>Authorized users only</p>
-
-    <input type="text" id="username" placeholder="Username">
-    <input type="password" id="password" placeholder="Password">
-    <button onclick="checkLogin()">Login</button>
-
-    <div class="error" id="error">Invalid username or password</div>
-  </div>
-
-  <!-- STORAGE -->
-  <div class="links" id="storageBox">
-    <h1>Personal Storage Hub</h1>
-    <p>Secure cloud access</p>
-
-    <a class="btn drive" href="https://drive.google.com/drive/folders/1FatQOQmnNPinJauQJkQuz50EHlxX9M0v" target="_blank">
-      <i class="fa-brands fa-google-drive"></i>
-      Google Drive
-    </a>
-
-    <a class="btn mega" href="https://mega.nz/folder/fhZUXDCQ#m0cbEPWdVtkXxJt8HC8Log" target="_blank">
-      <i class="fa-solid fa-cloud"></i>
-      MEGA Storage
-    </a>
-
-    <footer>
-      Private · Personal use
-    </footer>
-  </div>
-
+<!-- Main app -->
+<div class="app">
+    <div class="card">
+        <!-- Login section -->
+        <div class="login" id="login">
+            <h1>Secure Storage</h1>
+            <p class="login-subtitle">Muhammad Muzammil Nawaz</p>
+            
+            <div class="field">
+                <label class="field-label">Username</label>
+                <div class="input-wrapper">
+                    <div class="input-icon"><i class="fas fa-user"></i></div>
+                    <input type="text" id="user" class="input-field" placeholder="Enter your username" autocomplete="off">
+                </div>
+            </div>
+            
+            <div class="field">
+                <label class="field-label">Password</label>
+                <div class="input-wrapper">
+                    <div class="input-icon"><i class="fas fa-lock"></i></div>
+                    <input type="password" id="pass" class="input-field" placeholder="Enter your password" autocomplete="off">
+                </div>
+            </div>
+            
+            <button class="unlock-btn" onclick="unlock()">
+                <i class="fas fa-key"></i> Unlock Storage
+            </button>
+            
+            <div class="status-indicator">
+                <div class="status-dot"></div>
+                <span>Storage Security: Active</span>
+            </div>
+            
+            <div class="footer">
+                <p>© Muzammil Nawaz • Secure Storage</p>
+            </div>
+        </div>
+        
+        <!-- Vault section -->
+        <div class="vault" id="vault">
+            <div class="vault-header">
+                <div class="vault-title">
+                    <i class="fas fa-shield-alt"></i> Links
+                </div>
+                <button class="logout-btn" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+            
+            <div class="links-grid">
+                <div class="link-card drive fade-in-up" onclick="openDrive()" style="animation-delay: 0.1s">
+                    <div class="link-icon">
+                        <i class="fa-brands fa-google-drive"></i>
+                    </div>
+                    <div class="link-content">
+                        <div class="link-name">Drive</div>
+                    </div>
+                    <div class="link-arrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </div>
+                
+                <div class="link-card mega fade-in-up" onclick="openMega()" style="animation-delay: 0.2s">
+                    <div class="link-icon">
+                        <i class="fa-solid fa-cloud"></i>
+                    </div>
+                    <div class="link-content">
+                        <div class="link-name">Mega</div>
+                    </div>
+                    <div class="link-arrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="status-indicator">
+                <div class="status-dot"></div>
+                <span>Connection: Encrypted</span>
+            </div>
+            
+            <div class="footer">
+                <p>© Muzammil Nawaz • Secure Storage</p>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
-  function checkLogin() {
-    const user = document.getElementById("username").value;
-    const pass = document.getElementById("password").value;
+const USER = "themuzammilnawaz";
+const PASS = "themuz@mm1lnawaz";
 
-    if (user === "themuzammilnawaz" && pass === "@Pass(themuzammilnawaz)") {
-      document.getElementById("loginBox").style.display = "none";
-      document.getElementById("storageBox").style.display = "flex";
-    } else {
-      document.getElementById("error").style.display = "block";
+const DRIVE = atob("aHR0cHM6Ly9kcml2ZS5nb29nbGUuY29tL2RyaXZlL2ZvbGRlcnMvMUZhdFFPUW1uTlBpbkphdVFKa1F1ejUwRUhseFg5TTB2");
+const MEGA = atob("aHR0cHM6Ly9tZWdhLm56L2ZvbGRlci9maFpVWERDUSNtMGNiRVBXZFZ0a1h4SnQ4SEM4TG9n");
+
+function unlock() {
+    const u = document.getElementById("user").value.trim();
+    const p = document.getElementById("pass").value.trim();
+    const card = document.querySelector(".card");
+    const btn = document.querySelector(".unlock-btn");
+    
+    // Change button to loading state
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Authenticating...';
+    btn.disabled = true;
+    
+    // Simulate authentication delay
+    setTimeout(() => {
+        if (u === USER && p === PASS) {
+            // Successful login
+            document.getElementById("login").style.display = "none";
+            document.getElementById("vault").style.display = "block";
+            
+            // Reset button
+            btn.innerHTML = '<i class="fas fa-key"></i> Unlock Vault';
+            btn.disabled = false;
+        } else {
+            // Failed login
+            card.classList.add("shake");
+            btn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Access Denied';
+            btn.style.background = "linear-gradient(135deg, var(--danger), #dc2626)";
+            
+            // Reset after animation
+            setTimeout(() => {
+                card.classList.remove("shake");
+                btn.innerHTML = '<i class="fas fa-key"></i> Unlock Vault';
+                btn.style.background = "linear-gradient(135deg, var(--primary), var(--secondary))";
+                btn.disabled = false;
+            }, 1000);
+        }
+    }, 800);
+}
+
+function logout() {
+    document.getElementById("vault").style.display = "none";
+    document.getElementById("login").style.display = "block";
+    
+    // Clear fields
+    document.getElementById("user").value = "";
+    document.getElementById("pass").value = "";
+    
+    // Add fade in effect to login
+    document.getElementById("login").classList.add("fade-in-up");
+}
+
+function openDrive() {
+    // Add visual feedback before redirecting
+    const driveCard = document.querySelector(".drive");
+    driveCard.style.transform = "scale(0.98)";
+    driveCard.style.boxShadow = "0 0 0 3px rgba(59, 130, 246, 0.5)";
+    
+    setTimeout(() => {
+        location.href = DRIVE;
+    }, 300);
+}
+
+function openMega() {
+    // Add visual feedback before redirecting
+    const megaCard = document.querySelector(".mega");
+    megaCard.style.transform = "scale(0.98)";
+    megaCard.style.boxShadow = "0 0 0 3px rgba(239, 68, 68, 0.5)";
+    
+    setTimeout(() => {
+        location.href = MEGA;
+    }, 300);
+}
+
+// Allow pressing Enter to submit
+document.getElementById("pass").addEventListener("keypress", function(event) {
+    if (event.key === "Enter") {
+        unlock();
     }
-  }
-</script>
+});
 
+// Basic security features
+document.addEventListener("contextmenu", e => e.preventDefault());
+
+document.addEventListener("visibilitychange", () => {
+    if (document.hidden) {
+        // If user switches tabs, show a warning when they return
+        console.log("Vault security: Tab switched");
+    }
+});
+
+// Initialize with focus on username field
+window.onload = function() {
+    document.getElementById("user").focus();
+};
+</script>
 </body>
 </html>
